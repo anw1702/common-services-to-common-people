@@ -1,0 +1,75 @@
+import React, { useState } from 'react';
+
+const DeleteService = () => {
+    const [form, setForm] = useState({
+        serviceName: '',
+        serviceId: '',
+    });
+    const [formErrors, setFormErrors] = useState({});
+
+    const updateForm = (field, value) => {
+        setForm((prevForm) => ({ ...prevForm, [field]: value }));
+    };
+
+    const validateForm = () => {
+        const errors = {};
+        if (!form.serviceName) {
+            errors.serviceName = 'Service name is required';
+        }
+        if (!form.serviceId) {
+            errors.serviceId = 'Service ID is required';
+        }
+        return errors;
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const errors = validateForm();
+        if (Object.keys(errors).length === 0) {
+            // Perform service deletion (e.g., send API request)
+            console.log('Valid form data:', form);
+            // Clear the form:
+            setForm({ serviceName: '', serviceId: '' });
+        } else {
+            setFormErrors(errors);
+        }
+    };
+
+    return (
+        <div className="container2">
+            <h2>Delete Service</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label htmlFor="serviceName">Service Name:</label>
+                    <input
+                        type="text"
+                        id="serviceName"
+                        name="serviceName"
+                        required
+                        value={form.serviceName}
+                        onChange={(e) => updateForm('serviceName', e.target.value)}
+                    />
+                    {formErrors.serviceName && <span className="error">{formErrors.serviceName}</span>}
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="serviceId">Service ID:</label>
+                    <input
+                        type="text"
+                        id="serviceId"
+                        name="serviceId"
+                        required
+                        value={form.serviceId}
+                        onChange={(e) => updateForm('serviceId', e.target.value)}
+                    />
+                    {formErrors.serviceId && <span className="error">{formErrors.serviceId}</span>}
+                </div>
+
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+    );
+};
+
+export default DeleteService;
+
